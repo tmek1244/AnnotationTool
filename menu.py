@@ -23,6 +23,7 @@ class Menu(QVBoxLayout):
         self.open_btn.clicked.connect(self.select_dir)
 
         self.save_btn = QPushButton("Save")
+        self.save_btn.clicked.connect(self.save)
         self.file_options_layout.addWidget(self.open_btn, alignment=Qt.AlignmentFlag.AlignTop)
         self.file_options_layout.addWidget(self.save_btn, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -34,13 +35,13 @@ class Menu(QVBoxLayout):
     def select_dir(self):
         fname = QFileDialog.getExistingDirectory(
             self.parent,
-            "Open File",
+            "Open Dir",
             "${HOME}",
             QFileDialog.Option.ShowDirsOnly
         )
 
         if fname:
-            self.current_dir = iter(glob.glob(f'{fname}/*.png'))
+            self.current_dir = iter(sorted(glob.glob(f'{fname}/*.jpg')))
             self.next_image()
     
     def next_image(self):
@@ -52,3 +53,7 @@ class Menu(QVBoxLayout):
             return
 
         self.parent.show_image(next_image)
+
+    def save(self):
+        self.parent.save()
+        

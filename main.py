@@ -21,8 +21,9 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.current_dir = None
+        self.current_image = None
 
-        self.setWindowTitle("My App")
+        self.setWindowTitle("AnnotationTool")
 
         self.main_layout = QHBoxLayout()
         self.menu_layout = Menu(self)
@@ -41,27 +42,14 @@ class MainWindow(QMainWindow):
         self.setFixedHeight(height)
         widget.setLayout(self.main_layout)
         self.setCentralWidget(widget)
-
-    def open_image(self):
-        fname = QFileDialog.getOpenFileName(
-            self,
-            "Open File",
-            "${HOME}",
-            "All Files (*);;  PNG Files (*.png);; JPNG Files (*.jpng)",
-        )
-        if fname[0]:
-            pixmap = QPixmap(fname[0])
-            self.canvas.setPixmap(pixmap)
-    
+ 
     def show_image(self, image):
+        self.current_image = image
         pixmap = QPixmap(image)
-        self.canvas.setPixmap(
-            pixmap.scaled(
-                self.canvas.width(), 
-                self.canvas.height(), 
-                Qt.AspectRatioMode.KeepAspectRatio
-            )
-        )
+        self.canvas.show_image(pixmap)
+    
+    def save(self):
+        self.canvas.save_to_file(self.current_image.split('/')[-1])
         
 
 # You need one (and only one) QApplication instance per application.

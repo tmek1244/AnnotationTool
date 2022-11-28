@@ -39,5 +39,18 @@ class Canvas(QLabel):
                     (QRect(self.rect_begin, self.rect_end), str(text)))
             self.update()
     
-    def save_to_file(self):
-        pass
+    def save_to_file(self, image):
+        with open("output.csv", 'a') as output:
+            for object, label in self.objects:
+                output.write(f"{image},{label},{','.join(map(str, object.getCoords()))}\n")
+
+    def show_image(self, pixmap):
+        self.objects = []
+        self.update()
+        self.setPixmap(
+            pixmap.scaled(
+                self.width(), 
+                self.height(), 
+                Qt.AspectRatioMode.KeepAspectRatio
+            )
+        )
